@@ -285,7 +285,7 @@
       }
 
       #pauseMenuBorder {
-        background: linear-gradient(135deg, #FA1E4E, transparent 40%);
+        /*background: linear-gradient(135deg, #FA1E4E, transparent 40%);*/
         padding: 1px;
         border-radius: 4px;
         clip-path: polygon(10.5px 0, 100% 0, 100% 100%, 0 100%, 0 10.5px);
@@ -361,8 +361,6 @@
       <div class="emscripten" id="status">Downloading...</div>
 
       <progress value="0" max="100" id="progress" hidden="1"></progress>
-      <img id="QRCode" class="qrCode" src="runner.svg" alt="URL QR Code" hidden="1"></img>
-      <img id="QR2Code" class="qrCode" src="runnerLocal.svg" alt="URL QR2 Code" hidden="1"></img>
     </div>
     <div class="multiplayer-stats" id="multiplayer-stats">
       [no stats available]
@@ -371,13 +369,14 @@
       <button class="output-button" onclick="toggleConsole()">
         Toggle Console
       </button>
+      <!--
       <button id="QRButton" class="output-button" onclick="toggleQRCode()">
         Show QRCode
       </button>
       <button id="QR2Button" class="output-button" onclick="toggleQRCode2()">
         Show Opera GX QRCode
       </button>
-      <!--
+      
       <button id="webglbutton" class="output-button" onclick="toggleWebGLContext()">
         Lose WebGL Context
       </button>
