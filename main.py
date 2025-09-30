@@ -34,6 +34,19 @@ def index():
     body += files
     return Response('\n'.join(body), mimetype='text/plain', status=500)
 
+UNDERTALE_DIR = os.path.join(ROOT_DIR, 'undertale')
+
+@app.route('/undertale/', defaults={'filename': 'index.html'})
+@app.route('/undertale/<path:filename>')
+def serve_undertale(filename):
+    requested = os.path.join(UNDERTALE_DIR, filename)
+    logging.info("Requested /undertale/%s -> resolved %s", filename, requested)
+    if not os.path.exists(requested):
+        logging.warning("File not found in undertale folder: %s", requested)
+        return Response(f"File not found: {filename}\n", mimetype='text/plain', status=404)
+    if filename.endswith('.wasm'):
+        return send_file(requested, mimetype='application/wasm')
+    return send_from_directory(UNDERTALE_DIR, filename)
 
 @app.route('/index.html')
 def index_html():
