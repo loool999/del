@@ -71,8 +71,9 @@ def serve_file(filename):
 
     return send_from_directory(ROOT_DIR, filename)
 
+PORT = int(os.environ.get("PORT", 8080))
 
 if __name__ == "__main__":
     # Bind to 0.0.0.0 so containers can reach the server
     logging.info("Starting server, ROOT_DIR=%s", ROOT_DIR)
-    app.run(host="0.0.0.0", port=8080)
+    app.run(host="0.0.0.0", port=PORT)

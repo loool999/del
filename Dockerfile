@@ -2,20 +2,25 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install pip dependencies (requirements.txt is copied first for better caching)
+# Install dependencies
 COPY requirements.txt ./
-
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copy code
 COPY . /app
 
-# Expose the port the app listens on
-EXPOSE 8080
-EXPOSE 6502
+# Install Git and Git LFS
+RUN apt-get update && apt-get install -y git git-lfs \
+    && git lfs install
 
-# Ensure output is logged straight to the console
+# Pull LFS files
+RUN git lfs pull
+
+# Expose Cloud Run port
+EXPOSE 8080
+
+# Ensure console logging
 ENV PYTHONUNBUFFERED=1
 
-# Run the application
+# Run the Flask app
 CMD ["python", "main.py"]
