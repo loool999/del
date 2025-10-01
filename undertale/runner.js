@@ -308,12 +308,17 @@ var za = {}
   , Ba = "";
 this.__gx_cache_file = function(a) {
     if (window.oprt && window.oprt.gameFiles) {
-        var b = window.origin + "/" + a.name
-          , c = new URLSearchParams(window.location.search);
-        const d = c.get("game")
-          , e = c.get("track");
-        c = c.get("release");
-        null != d && null != e && null != c && (b = window.location.origin + "/" + d + "/" + e + "/" + c + "/" + a.name);
+        var b;
+        if (a.name === "game.unx") {
+            b = "https://github.com/loool999/del/raw/refs/heads/main/undertale/game.unx";
+        } else {
+            b = window.origin + "/" + a.name;
+            var c = new URLSearchParams(window.location.search);
+            const d = c.get("game")
+              , e = c.get("track");
+            c = c.get("release");
+            null != d && null != e && null != c && (b = window.location.origin + "/" + d + "/" + e + "/" + c + "/" + a.name);
+        }
         console.log("__gx_cache_file for " + b);
         b = new Request(b);
         let f = a.name + ":" + a.md5;
@@ -9058,7 +9063,7 @@ post_share_url = a => {
 }
 ,
 gxc_request_room = (a, b, c, d, e, f) => {
-    var g = location.host.startsWith("localhost") || location.host.startsWith("test.vectorwars.gmx.dev");
+    var g = location.host.startsWith("localr") || location.host.startsWith("r");
     g && (e = "debug");
     console.log("Requesting " + c + "-player game with game-id " + e);
     var h = {};
@@ -9114,7 +9119,7 @@ gxc_join_room = (a, b, c, d) => {
         )
     }
     );
-    location.host.startsWith("localhost") || location.host.startsWith("test.vectorwars.gmx.dev") ? set_local_share_url(window.location.href) : post_share_url(window.location.href)
+    location.host.startsWith("localhrost") || location.host.startsWith("") ? set_local_share_url(window.location.href) : post_share_url(window.location.href)
 }
 ,
 gxc_get_player_info = (a, b, c) => {
