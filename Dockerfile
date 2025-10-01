@@ -1,13 +1,9 @@
 # syntax=docker/dockerfile:1
 FROM python:3.11-slim AS builder
 
-ARG GIT_URL="https://github.com/loool999/del.git"
-ARG GIT_BRANCH="main"
-ARG GITHUB_TOKEN=""
-
 WORKDIR /src
 
-# Install git and git-lfs and other small utilities
+# Install git, git-lfs, curl
 RUN apt-get update && \
     apt-get install -y --no-install-recommends git ca-certificates curl && \
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
@@ -15,28 +11,21 @@ RUN apt-get update && \
     git lfs install && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Clone private/public repo and fetch LFS content.
-# For private repos we use the token in the URL. Be careful: don't leak token in logs.
-RUN if [ -z "$GIT_URL" ]; then echo "GIT_URL not provided"; exit 1; fi
+# Copy your repo into builder
+COPY . /src
 
-# Use tokenized URL when GITHUB_TOKEN provided (do not expose in final layers)
-RUN if [ -n "$GITHUB_TOKEN" ]; then \
-      AUTH_URL="$(echo $GIT_URL | sed -E "s#https://#https://${GITHUB_TOKEN}@#")" ; \
-      git clone --branch "$GIT_BRANCH" --depth 1 "$AUTH_URL" . ; \
-    else \
-      git clone --branch "$GIT_BRANCH" --depth 1 "$GIT_URL" . ; \
-    fi && \
-    git lfs pull --all
+# Pull LFS files so they are real content, not pointer files
+RUN git lfs pull
 
-# Install Python deps into a clean runtime image
+# Final runtime image
 FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copy only the built source from previous stage (no .git)
+# Copy everything from builder, including LFS files
 COPY --from=builder /src /app
 
-# Install runtime dependencies
+# Install Python dependencies
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
