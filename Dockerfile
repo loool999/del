@@ -15,10 +15,6 @@ RUN apt-get update && \
     git lfs install && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN docker build \
-    --build-arg GIT_URL="https://github.com/loool999/del.git" \
-    --build-arg GIT_BRANCH="main" \
-    -t gcr.io/PROJECT-ID/del:latest .
 # Clone private/public repo and fetch LFS content.
 # For private repos we use the token in the URL. Be careful: don't leak token in logs.
 RUN if [ -z "$GIT_URL" ]; then echo "GIT_URL not provided"; exit 1; fi
