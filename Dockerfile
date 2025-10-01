@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 FROM python:3.11-slim AS builder
 
-ARG GIT_URL=""
+ARG GIT_URL="https://github.com/loool999/del.git"
 ARG GIT_BRANCH="main"
 ARG GITHUB_TOKEN=""
 
