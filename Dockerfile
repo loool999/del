@@ -12,6 +12,7 @@ COPY . /app
 
 # Expose the port the app listens on
 EXPOSE 8080
+EXPOSE 6502
 
 # Ensure output is logged straight to the console
 ENV PYTHONUNBUFFERED=1
